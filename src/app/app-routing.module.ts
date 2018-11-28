@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { UsersComponent } from './users/users.component';
 import { AlbumsComponent } from './albums/albums.component';
 import { PhotosComponent } from './photos/photos.component';
+import { ChartsComponent } from './charts/charts.component';
 const routes: Routes = [
   {
     path:"",
@@ -15,6 +16,10 @@ const routes: Routes = [
   {
     path:"photos/:id",
     component: PhotosComponent
+  },
+  {
+    path:"charts",
+    component: ChartsComponent
   }
 ];
 

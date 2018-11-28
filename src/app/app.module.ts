@@ -10,6 +10,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { ChartsComponent } from './charts/charts.component';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     AlbumsComponent,
     PhotosComponent,
     SidebarComponent,
+    ChartsComponent,
   ],
   imports: [
     BrowserModule,
