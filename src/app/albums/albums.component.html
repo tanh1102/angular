@@ -1,0 +1,7 @@
+<h1>Albums</h1>
+
+<ul>
+  <li *ngFor="let album of albums$" class="animated fadeIn">
+    <a routerLink="/photos/{{album.id}}">{{ album.id }}</a>. {{ album.title }}
+  </li>
+</ul>

@@ -1,0 +1,25 @@
+h1{
+    text-align: center;
+}
+
+ul{
+    list-style-type: none;
+
+    li{
+        font-size: 20px;
+        line-height: 40px;
+        color: khaki;
+        vertical-align: middle;
+        margin-left: 50px;
+        margin-right: 50px;
+        a{
+            color: khaki;
+        }
+    }
+
+    li:hover{
+        font-size: 30px;
+        background-color: rgba(0,0,0,.25);
+        transition-duration: 1s;
+    }
+}

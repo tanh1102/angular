@@ -1,0 +1,46 @@
+<h1>Users</h1>
+
+  <ul class="animated bounceInDown">
+    <li *ngFor="let user of users$" (click)="openModal(template)">
+        {{ user.id }}. {{ user.name }}
+
+        <ul>
+          <li>{{ user.email }} </li>
+          <li>{{ user.phone }} </li>
+        </ul>
+
+        <ng-template #template>
+            <div class="modal-header">
+              <h4 class="modal-title">{{ user.name }}</h4>
+              <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <ul>
+                <li>Username: {{ user.username }}</li>
+                <li>Email: {{ user.email }}</li>
+                <li>Phone-number: {{ user.phone }}</li>
+                <li>Company: {{ user.company.name }}</li>
+              </ul>
+              <div class="collapse" id="collapseExample">
+                  <div class="card card-body">
+                    <ul>
+                      <li>
+                        City: {{ user.address.city }}
+                      </li>
+                      <li>
+                        Zipcode: {{ user.address.zipcode }}
+                      </li>
+                    </ul>
+                  </div>
+              </div>
+              <p>
+                <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                  Load more
+                </a>
+              </p>
+            </div>
+          </ng-template>
+    </li>
+  </ul>
