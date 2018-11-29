@@ -106,7 +106,7 @@ export class ChartsComponent implements OnInit {
 
     
     //create-char-donut
-    let donut = am4core.create("donutdiv", am4charts.PieChart);
+    let donut = am4core.create("donutdiv", am4charts.PieChart3D);
     //add data
     donut.data = [ {
       "country": "Lithuania",
@@ -141,7 +141,7 @@ export class ChartsComponent implements OnInit {
     donut.innerRadius = am4core.percent(50);
 
     //add and configure series
-    let pieSeries = donut.series.push(new am4charts.PieSeries());
+    let pieSeries = donut.series.push(new am4charts.PieSeries3D());
     pieSeries.dataFields.value = "litres";
     pieSeries.dataFields.category = "country";
     pieSeries.slices.template.stroke = am4core.color("#fff");
@@ -198,10 +198,10 @@ export class ChartsComponent implements OnInit {
     contientTemplate.properties.fillOpacity = 0.8;
     contientTemplate.propertyFields.fill = "color";
     contientTemplate.events.on("hit", function(event){
-      if(!countriesSeires.visible) countriesSeries.visible = true;
+      if(!countriesSeires.visible) countriesSeires.visible = true;
       map.zoomToMapObject(event.target);
-      countryTemplate.Show();
-      labelContainer.Show();
+      countryTemplate.show();
+      labelContainer.show();
     });
 
     let contintentHover = contientTemplate.states.create("hover");
@@ -246,7 +246,8 @@ export class ChartsComponent implements OnInit {
     countryTemplate.fill = am4core.color("#a791b4");
     countryTemplate.fillOpacity = 0.3;
     countryTemplate.strokeOpacity = 0.3;
-    countryTemplate.events.on("hit", function(){
+    countryTemplate.tooltipText = "{name}";
+    countryTemplate.events.on("hit", function(event){
       map.zoomToMapObject(event.target);
     });
 
@@ -270,7 +271,7 @@ export class ChartsComponent implements OnInit {
     labelContainer.y = am4core.percent(100);
     labelContainer.dx = 10;
     labelContainer.dy = -25;
-    labelContainer.background.fill = "#fff";
+    labelContainer.background.fill = am4core.color("#fff");
     labelContainer.background.fillOpacity = 0;
     labelContainer.setStateOnChildren = true;
     labelContainer.states.create("hover");
@@ -293,4 +294,5 @@ export class ChartsComponent implements OnInit {
     label.dy = -5;
     label.text = "Back to continents map";
     label.states.create("hover").properties.fill = hoverColor;
+  }
 }

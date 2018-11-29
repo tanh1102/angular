@@ -11,6 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ChartsComponent } from './charts/charts.component';
+import { DangerInfoComponent } from './danger-info/danger-info.component';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { ChartsComponent } from './charts/charts.component';
     PhotosComponent,
     SidebarComponent,
     ChartsComponent,
+    DangerInfoComponent,
   ],
   imports: [
     BrowserModule,

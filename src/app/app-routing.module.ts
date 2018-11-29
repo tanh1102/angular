@@ -4,6 +4,7 @@ import { UsersComponent } from './users/users.component';
 import { AlbumsComponent } from './albums/albums.component';
 import { PhotosComponent } from './photos/photos.component';
 import { ChartsComponent } from './charts/charts.component';
+import { DangerInfoComponent } from './danger-info/danger-info.component';
 const routes: Routes = [
   {
     path:"",
@@ -20,6 +21,10 @@ const routes: Routes = [
   {
     path:"charts",
     component: ChartsComponent
+  },
+  {
+    path:"danger-info",
+    component: DangerInfoComponent
   }
 ];
 
