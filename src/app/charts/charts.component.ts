@@ -294,5 +294,7 @@ export class ChartsComponent implements OnInit {
     label.dy = -5;
     label.text = "Back to continents map";
     label.states.create("hover").properties.fill = hoverColor;
+
   }
+
 }

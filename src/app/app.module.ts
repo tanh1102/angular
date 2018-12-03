@@ -12,6 +12,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ChartsComponent } from './charts/charts.component';
 import { DangerInfoComponent } from './danger-info/danger-info.component';
+import { MapLineComponent } from './map-line/map-line.component';
+import { QuestionComponent } from './question/question.component';
 
 
 @NgModule({
@@ -23,6 +25,8 @@ import { DangerInfoComponent } from './danger-info/danger-info.component';
     SidebarComponent,
     ChartsComponent,
     DangerInfoComponent,
+    MapLineComponent,
+    QuestionComponent
   ],
   imports: [
     BrowserModule,
