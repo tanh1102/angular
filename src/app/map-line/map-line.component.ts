@@ -4,7 +4,6 @@ import * as am4charts from '@amcharts/amcharts4/charts';
 import * as am4maps from "@amcharts/amcharts4/maps";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import am4geodata_worldLow from "@amcharts/amcharts4-geodata/worldLow";
-import { add } from '@amcharts/amcharts4/.internal/core/utils/Array';
 am4core.useTheme(am4themes_animated);
 
 @Component({
@@ -37,11 +36,32 @@ export class MapLineComponent implements OnInit {
     let cities = map.series.push(new am4maps.MapImageSeries());
     cities.mapImages.template.nonScaling = true;
 
+    let fillCurrent = am4core.color("#fff");
+    let fillAfter = am4core.color("#000");
+
     let city = cities.mapImages.template.createChild(am4core.Circle);
-    city.radius = 6;
-    city.fill = map.colors.getIndex(0).brighten(-0.2);
-    city.strokeWidth = 2;
-    city.stroke = am4core.color("#fff");
+    city.radius = 5;
+    city.fill = fillCurrent;
+    city.strokeWidth = 3;
+    city.stroke = am4core.color("#000");
+    city.applyOnClones = true;
+
+    function bling(){
+        let from,to;
+        if( city.fill == fillAfter){
+            from = fillAfter;
+            to = fillCurrent;
+        }else{
+            from = fillCurrent;
+            to = fillAfter;
+        }
+        let animation = city.animate({
+            from: from,
+            to: to,
+            property: "fill"
+        },1500, am4core.ease.sinInOut);
+        animation.events.on("animationended", bling);
+    }
 
     function addCity(coords, title) {
         let city = cities.mapImages.create();
@@ -54,14 +74,15 @@ export class MapLineComponent implements OnInit {
     let paris = addCity({ "latitude": 48.8567, "longitude": 2.3510 }, "Paris");
     let toronto = addCity({ "latitude": 43.8163, "longitude": -79.4287 }, "Toronto");
 
+ 
+
     // Add lines
     let lineSeries = map.series.push(new am4maps.MapArcSeries());
-    lineSeries.mapLines.template.line.stroke = am4core.color("#fff");
-    lineSeries.mapLines.template.line.strokeDasharray = "1,1";
+    lineSeries.mapLines.template.line.strokeOpacity = 0;
 
     function addLine(from, to) {
         let line = lineSeries.mapLines.create();
-       line.imagesToConnect = [from, to];
+        line.imagesToConnect = [from, to];
         line.line.controlPointDistance = 0;
 
         return line;
@@ -72,20 +93,20 @@ export class MapLineComponent implements OnInit {
     // Add plane
     let plane = lineSeries.mapLines.getIndex(0).lineObjects.create();
     plane.position = 0;
-    plane.width = 48;
-    plane.height = 48;
 
     plane.adapter.add("scale", (scale, target) => {
         return 0.5 * (1 - (Math.abs(0.5 - target.position)));
     })
 
     let planeImage = plane.createChild(am4core.Sprite);
-    planeImage.scale = 0.08;
+    planeImage.scale = 0.5;
     planeImage.horizontalCenter = "middle";
     planeImage.verticalCenter = "middle";
-    planeImage.path = "m2,106h28l24,30h72l-44,-133h35l80,132h98c21,0 21,34 0,34l-98,0 -80,134h-35l43,-133h-71l-24,30h-28l15,-47";
+    planeImage.path = "M10 10 H 200 V 20 H 10";
     planeImage.fill = map.colors.getIndex(2).brighten(-0.2);
     planeImage.strokeOpacity = 0;
+    planeImage.width = 30;
+    planeImage.height = 30;
 
     // Plane animation
     let currentLine = 0;
@@ -101,10 +122,6 @@ export class MapLineComponent implements OnInit {
         if (direction == 1) {
             from = 0
             to = 1;
-            if (planeImage.rotation != 0) {
-                planeImage.animate({ to: 0, property: "rotation" }, 1000).events.on("animationended", flyPlane);
-                return;
-            }
         }
 
         // Start the animation
@@ -112,7 +129,7 @@ export class MapLineComponent implements OnInit {
             from: from,
             to: to,
             property: "position"
-        }, 1000, am4core.ease.sinInOut);
+        }, 1500, am4core.ease.quadIn);
         animation.events.on("animationended", flyPlane)
         /*animation.events.on("animationprogress", function(ev) {
           let progress = Math.abs(ev.progress - 0.5);
@@ -124,5 +141,6 @@ export class MapLineComponent implements OnInit {
 
     // Go!
     flyPlane();
+    bling();
   }
 }
