@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 import * as topojson from 'topojson';
+import { throwError } from 'rxjs';
+import { svg } from 'd3';
 
 @Component({
   selector: 'app-question',
@@ -12,35 +14,44 @@ export class QuestionComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    var width = window.innerWidth,
-    height = window.innerHeight,
-    centered,
-    clicked_point;
+    var WIDTH = 960;
+    var HEIGHT = 580;
+    var TRANS_DURATION = 1500;
+    var COLORS = [
+      'rgb(255, 179, 186)',
+      'rgb(255, 223, 186)',
+      'rgb(255, 255, 186)',
+      'rgb(186, 255, 201)',
+      'rgb(186, 255, 255)'
+    ];
 
-var projection = d3.geoMercator()
-    .translate([width / 2.2, height / 1.5]);
-    
-var plane_path = d3.geoPath()
-        .projection(projection);
+    function rndRange(min, max) {
+      return Math.floor(Math.random() * (max - min +1) + min);
+    };
 
-var svg = d3.select("#map").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .attr("class", "map");
-    
-var g = svg.append("g");
-var path = d3.geoPath()
-    .projection(projection);
-    
-// load and display the World
-d3.json("https://unpkg.com/world-atlas@1/world/110m.json", function(error, topology) {
-    g.selectAll("path")
-      .data(topojson.feature(topology, topology.objects.countries)
-          .features)
-      .enter()
-      .append("path")
-      .attr("d", path)
-      ;
- });
+    function unitVector(x1, y1, x2 , y2){
+      var v = [x2-x1, y2-y1];
+      var norm = Math.sqrt(Math.pow(v[0], 2) + Math.pow(v[1], 2));
+      return [v[0]/norm, v[1]/norm];
+    };
+
+
+    /* map */
+
+    d3.json("./world-110m.json"), (error, world) => {
+      if (error) throw error;
+
+      var countries = topojson.feature(world, world.object.countries).feature;
+
+      
+    }
+
+
+
+
+
+
+
+
   }
 }

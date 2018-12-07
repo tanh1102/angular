@@ -20,12 +20,6 @@ export class MapLineComponent implements OnInit {
     let map = am4core.create("mapdiv", am4maps.MapChart);
     map.geodata = am4geodata_worldLow;
     map.projection = new am4maps.projections.Miller();
-    map.homeZoomLevel = 2.5;
-    map.homeGeoPoint = {
-      latitude: 38,
-      longitude: -60
-    };
-
     //Create map polygon series
     let polygonSeries = map.series.push(new am4maps.MapPolygonSeries());
     polygonSeries.useGeodata = true;
@@ -36,32 +30,17 @@ export class MapLineComponent implements OnInit {
     let cities = map.series.push(new am4maps.MapImageSeries());
     cities.mapImages.template.nonScaling = true;
 
-    let fillCurrent = am4core.color("#fff");
-    let fillAfter = am4core.color("#000");
+    let radiusCurrent = 3;
+    let radiusAfter = 7;
+
+
 
     let city = cities.mapImages.template.createChild(am4core.Circle);
     city.radius = 5;
-    city.fill = fillCurrent;
+    city.fill = map.colors.getIndex(0).lighten(0.5);
     city.strokeWidth = 3;
     city.stroke = am4core.color("#000");
     city.applyOnClones = true;
-
-    function bling(){
-        let from,to;
-        if( city.fill == fillAfter){
-            from = fillAfter;
-            to = fillCurrent;
-        }else{
-            from = fillCurrent;
-            to = fillAfter;
-        }
-        let animation = city.animate({
-            from: from,
-            to: to,
-            property: "fill"
-        },1500, am4core.ease.sinInOut);
-        animation.events.on("animationended", bling);
-    }
 
     function addCity(coords, title) {
         let city = cities.mapImages.create();
@@ -74,7 +53,21 @@ export class MapLineComponent implements OnInit {
     let paris = addCity({ "latitude": 48.8567, "longitude": 2.3510 }, "Paris");
     let toronto = addCity({ "latitude": 43.8163, "longitude": -79.4287 }, "Toronto");
 
- 
+    let sourceCity = [paris];
+    let targetCity = [toronto];
+
+    function bling(){
+        let from,to;
+            from = radiusCurrent;
+            to = radiusAfter;
+        
+        let animation = city.animate({
+            from: from,
+            to: to,
+            property: "radius"
+        },1500, am4core.ease.linear);
+        animation.events.on("animationended", bling);
+    }
 
     // Add lines
     let lineSeries = map.series.push(new am4maps.MapArcSeries());
