@@ -31,15 +31,16 @@ export class MapLineComponent implements OnInit {
     cities.mapImages.template.nonScaling = true;
 
     let radiusCurrent = 3;
-    let radiusAfter = 7;
+    let radiusAfter = 10;
 
-
+    let strokeCurrent = am4core.color("#000");
+    let strokeAfter = map.colors.getIndex(0).lighten(0.5);
 
     let city = cities.mapImages.template.createChild(am4core.Circle);
     city.radius = 5;
     city.fill = map.colors.getIndex(0).lighten(0.5);
     city.strokeWidth = 3;
-    city.stroke = am4core.color("#000");
+    city.stroke = strokeCurrent;
     city.applyOnClones = true;
 
     function addCity(coords, title) {
@@ -66,8 +67,22 @@ export class MapLineComponent implements OnInit {
             to: to,
             property: "radius"
         },1500, am4core.ease.linear);
-        animation.events.on("animationended", bling);
+        animation.events.on("animationended", bling);// không muốn lặp lại thì xóa cái này
     }
+
+
+    function hiddenCity(){
+        let from, to;
+            from = strokeCurrent;
+            to = strokeAfter;
+        let animation = city.animate({
+            from: from,
+            to: to,
+            property: "stroke"
+        },1500, am4core.ease.linear);
+        animation.events.on("animationended", hiddenCity);
+    }
+    
 
     // Add lines
     let lineSeries = map.series.push(new am4maps.MapArcSeries());
@@ -135,5 +150,6 @@ export class MapLineComponent implements OnInit {
     // Go!
     flyPlane();
     bling();
+    hiddenCity();
   }
 }
