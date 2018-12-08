@@ -176,7 +176,7 @@ export class MapLineComponent implements OnInit {
  
      let planeImage = plane.createChild(am4core.Sprite);
      planeImage.scale = 0.5;
-     planeImage.horizontalCenter = "middle";
+     planeImage.horizontalCenter = "right";
      planeImage.verticalCenter = "middle";
      planeImage.path = "M10 10 H 200 V 20 H 10";
      planeImage.fill = currentPlaneFill;
