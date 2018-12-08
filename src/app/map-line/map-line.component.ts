@@ -152,11 +152,10 @@ export class MapLineComponent implements OnInit {
      // Add lines
      let lineSeries = map.series.push(new am4maps.MapArcSeries());
      lineSeries.mapLines.template.line.strokeOpacity = 0;
- 
      function addLine(from, to) {
          let line = lineSeries.mapLines.create();
          line.imagesToConnect = [from, to];
-         line.line.controlPointDistance = 0;
+         line.line.controlPointDistance = -0.3;
  
          return line;
      }
