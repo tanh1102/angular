@@ -67,59 +67,58 @@ export class MapLineComponent implements OnInit {
   }
  
      let paris = addCitySource({ "latitude": 48.8567, "longitude": 2.3510 });
+     let havana = addCitySource({ "latitude": 23, "longitude": -82 })
      let toronto = addCityTarget({ "latitude": 43.8163, "longitude": -79.4287 });
  
     // Animation of source city
-     function hiddenCitySource(){
-         let from, to;
-             from = strokeCurrent;
-             to = strokeAfter;
-         let animation = citySource.animate({
-             from: from,
-             to: to,
-             property: "stroke"
-         },100, am4core.ease.linear);
-     }
- 
-     function blingCitySource(){
-         let from,to;
-             from = radiusCurrent;
-             to = radiusAfter;
-         
-         let animation = citySource.animate({
-             from: from,
-             to: to,
-             property: "radius"
-         },500, am4core.ease.linear);
-         animation.events.on("animationended", hiddenCitySource);// sau khi kết thúc event thì làm gì
-     }
 
-     function backStrokeCitySource(){
-      let from,to
-        from = strokeAfter
-        to = strokeCurrent
-      let animation = citySource.animate({
-        from: from,
-        to: to,
-        property: "stroke"
-      },1, am4core.ease.linear);
-      animation.events.on("animationended", blingCitySource);
+    function backRadiusSource(){
+        let from, to;
+            from = radiusAfter;
+            to = radiusCurrent;
+        
+    }
+
+    function hiddenCitySource(){
+        let from, to;
+            from = strokeCurrent;
+            to = strokeAfter;
+        let animation = citySource.animate({
+            from: from,
+            to: to,
+            property: "stroke"
+        },100, am4core.ease.linear);
+    }
+
+    function blingCitySource(){
+        let from,to;
+            from = radiusCurrent;
+            to = radiusAfter;
+        
+        let animation = citySource.animate({
+            from: from,
+            to: to,
+            property: "radius"
+        },500, am4core.ease.linear);
+        animation.events.on("animationended", hiddenCitySource);// sau khi kết thúc event thì làm gì
+    }
+
+    function backStrokeCitySource(){
+    let from,to
+    from = strokeAfter
+    to = strokeCurrent
+    let animation = citySource.animate({
+    from: from,
+    to: to,
+    property: "stroke"
+    },1, am4core.ease.linear);
+    animation.events.on("animationended", blingCitySource);
     }
 
 
      
      //animation of target city
 
-     function hiddenCityTarget(){
-      let from, to;
-          from = strokeCurrent;
-          to = strokeAfter;
-      let animation = cityTarget.animate({
-          from: from,
-          to: to,
-          property: "stroke"
-      },100, am4core.ease.linear);
-    }
 
     function blingCityTarget(){
       let from,to;
@@ -131,7 +130,7 @@ export class MapLineComponent implements OnInit {
           to: to,
           property: "radius"
       },1500, am4core.ease.linear);
-      animation.events.on("animationended", hiddenCityTarget);// sau khi kết thúc event thì làm gì
+      animation.events.on("animationended", backStrokeCityTarget);// sau khi kết thúc event thì làm gì
     }
 
     function backStrokeCityTarget(){
@@ -143,7 +142,6 @@ export class MapLineComponent implements OnInit {
         to: to,
         property: "stroke"
       },1, am4core.ease.linear);
-      animation.events.on("animationended", blingCityTarget);
     }
  
      
@@ -161,6 +159,7 @@ export class MapLineComponent implements OnInit {
      }
  
      addLine(paris, toronto);
+     addLine(havana, toronto);
  
      // Add plane
      let plane = lineSeries.mapLines.getIndex(0).lineObjects.create();
@@ -187,6 +186,7 @@ export class MapLineComponent implements OnInit {
      // Plane animation
      let currentLine = 0;
      let direction = 1;
+     
 
      function backFillPlane(){
         let from, to
@@ -202,8 +202,8 @@ export class MapLineComponent implements OnInit {
      function backPositionPlane(){
       let from, to;
       if (direction == 1) {
-          from = 0
-          to = 1;
+          from = 1
+          to = 0;
       }
 
       // Start the animation
@@ -227,6 +227,8 @@ export class MapLineComponent implements OnInit {
      }
  
      function flyPlane() {
+
+        
  
          // Get current line to attach plane to
          plane.mapLine = lineSeries.mapLines.getIndex(currentLine);
@@ -262,7 +264,6 @@ export class MapLineComponent implements OnInit {
          blingCitySource();
          blingCityTarget();
          backFillPlane();
-         backStrokeCityTarget();
          backStrokeCitySource();
      });
     }
