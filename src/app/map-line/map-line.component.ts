@@ -32,14 +32,14 @@ export class MapLineComponent implements OnInit {
      let cities2 = map.series.push(new am4maps.MapImageSeries());
      cities2.mapImages.template.nonScaling = true;
  
-     let radiusCurrent = 3;
+     let radiusCurrent = 5;
      let radiusAfter = 10;
  
      let strokeCurrent = am4core.color("#000");
      let strokeAfter = map.colors.getIndex(0).lighten(0.5);
  
      let citySource = cities1.mapImages.template.createChild(am4core.Circle);
-     citySource.radius = 5;
+     citySource.radius = radiusCurrent;
      citySource.fill = map.colors.getIndex(0).lighten(0.5);
      citySource.strokeWidth = 3;
      citySource.stroke = strokeCurrent;
@@ -67,7 +67,10 @@ export class MapLineComponent implements OnInit {
   }
  
      let paris = addCitySource({ "latitude": 48.8567, "longitude": 2.3510 });
-     let havana = addCitySource({ "latitude": 23, "longitude": -82 })
+     let havana = addCitySource({ "latitude": 23, "longitude": -82 });
+     let newyork = addCitySource({ "latitude": 40.717650, "longitude": -74});
+     let hn = addCitySource({"latitude": 21.026984, "longtitude": 105.835848});
+
      let toronto = addCityTarget({ "latitude": 43.8163, "longitude": -79.4287 });
  
     // Animation of source city
@@ -76,7 +79,11 @@ export class MapLineComponent implements OnInit {
         let from, to;
             from = radiusAfter;
             to = radiusCurrent;
-        
+        citySource.animate({
+            from: from,
+            to: to,
+            property: "radius"
+        },1, am4core.ease.linear);
     }
 
     function hiddenCitySource(){
@@ -88,6 +95,7 @@ export class MapLineComponent implements OnInit {
             to: to,
             property: "stroke"
         },100, am4core.ease.linear);
+        animation.events.on("animationended", backRadiusSource);
     }
 
     function blingCitySource(){
@@ -157,10 +165,12 @@ export class MapLineComponent implements OnInit {
  
          return line;
      }
- 
-     addLine(paris, toronto);
+
      addLine(havana, toronto);
- 
+     addLine(paris, toronto);
+     addLine(newyork, toronto);
+     addLine(hn, toronto);
+
      // Add plane
      let plane = lineSeries.mapLines.getIndex(0).lineObjects.create();
      plane.position = 0;
@@ -176,12 +186,13 @@ export class MapLineComponent implements OnInit {
      planeImage.scale = 0.5;
      planeImage.horizontalCenter = "right";
      planeImage.verticalCenter = "middle";
+     planeImage.align = "center";
      planeImage.path = "M10 10 H 200 V 20 H 10";
      planeImage.fill = currentPlaneFill;
      planeImage.strokeOpacity = 0;
      planeImage.width = 30;
      planeImage.height = 30;
- 
+     
      
      // Plane animation
      let currentLine = 0;
@@ -201,17 +212,17 @@ export class MapLineComponent implements OnInit {
 
      function backPositionPlane(){
       let from, to;
+      let numLines = lineSeries.mapLines.length;
       if (direction == 1) {
           from = 1
           to = 0;
       }
-
-      // Start the animation
       let animation = plane.animate({
           from: from,
           to: to,
           property: "position"
       }, 1, am4core.ease.quadIn);
+
      }
  
      function hiddenPlane(){
@@ -236,6 +247,7 @@ export class MapLineComponent implements OnInit {
  
          // Set up animation
          let from, to;
+         let numLines = lineSeries.mapLines.length;
          if (direction == 1) {
              from = 0
              to = 1;
@@ -253,7 +265,6 @@ export class MapLineComponent implements OnInit {
            //console.log(progress);
            //planeImage.scale += 0.2;
          });*/
-         
      }
  
      // Go!
