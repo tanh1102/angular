@@ -69,7 +69,6 @@ export class MapLineComponent implements OnInit {
      let paris = addCitySource({ "latitude": 48.8567, "longitude": 2.3510 });
      let havana = addCitySource({ "latitude": 23, "longitude": -82 });
      let newyork = addCitySource({ "latitude": 40.717650, "longitude": -74});
-     let hn = addCitySource({"latitude": 21.026984, "longtitude": 105.835848});
 
      let toronto = addCityTarget({ "latitude": 43.8163, "longitude": -79.4287 });
  
@@ -166,115 +165,116 @@ export class MapLineComponent implements OnInit {
          return line;
      }
 
-     addLine(havana, toronto);
      addLine(paris, toronto);
+     addLine(havana, toronto);
      addLine(newyork, toronto);
-     addLine(hn, toronto);
 
      // Add plane
-     let plane = lineSeries.mapLines.getIndex(0).lineObjects.create();
-     plane.position = 0;
- 
-     plane.adapter.add("scale", (scale, target) => {
-         return 0.5 * (1 - (Math.abs(0.5 - target.position)));
-     })
- 
-     let currentPlaneFill = map.colors.getIndex(2).brighten(-0.2);
-     let afterPlaneFill = map.colors.getIndex(0).lighten(0.5);
- 
-     let planeImage = plane.createChild(am4core.Sprite);
-     planeImage.scale = 0.5;
-     planeImage.horizontalCenter = "right";
-     planeImage.verticalCenter = "middle";
-     planeImage.align = "center";
-     planeImage.path = "M10 10 H 200 V 20 H 10";
-     planeImage.fill = currentPlaneFill;
-     planeImage.strokeOpacity = 0;
-     planeImage.width = 30;
-     planeImage.height = 30;
-     
-     
-     // Plane animation
-     let currentLine = 0;
-     let direction = 1;
-     
+   function addPlane(){
+    let plane = lineSeries.mapLines.getIndex(0).lineObjects.create();
+    plane.position = 0;
 
-     function backFillPlane(){
+    plane.adapter.add("scale", (scale, target) => {
+        return 0.5 * (1 - (Math.abs(0.5 - target.position)));
+    })
+
+    let currentPlaneFill = map.colors.getIndex(2).brighten(-0.2);
+    let afterPlaneFill = map.colors.getIndex(0).lighten(0.5);
+
+    let planeImage = plane.createChild(am4core.Sprite);
+    planeImage.scale = 0.5;
+    planeImage.horizontalCenter = "right";
+    planeImage.verticalCenter = "middle";
+    planeImage.align = "center";
+    planeImage.path = "M10 10 H 200 V 20 H 10";
+    planeImage.fill = currentPlaneFill;
+    planeImage.strokeOpacity = 0;
+    planeImage.width = 30;
+    planeImage.height = 30;
+    
+    
+    // Plane animation
+    let currentLine = 0;
+    let direction = 1;
+    
+
+    function backFillPlane(){
+       let from, to
+         from = afterPlaneFill
+         to = currentPlaneFill
+         let animation = planeImage.animate({
+           from: from,
+           to: to,
+           property: "fill"
+       },1, am4core.ease.quadIn); 
+    }
+
+    function backPositionPlane(){
+     let from, to;
+     let numLines = lineSeries.mapLines.length;
+     if (direction == 1) {
+         from = 1
+         to = 0;
+     }
+     let animation = plane.animate({
+         from: from,
+         to: to,
+         property: "position"
+     }, 1, am4core.ease.quadIn);
+
+    }
+
+    function hiddenPlane(){
         let from, to
-          from = afterPlaneFill
-          to = currentPlaneFill
-          let animation = planeImage.animate({
+           from = currentPlaneFill
+           to = afterPlaneFill
+        let animation = planeImage.animate({
             from: from,
             to: to,
             property: "fill"
-        },1, am4core.ease.quadIn); 
-     }
+        },100, am4core.ease.quadIn);
+        animation.events.on("animationended", backPositionPlane);
+    }
 
-     function backPositionPlane(){
-      let from, to;
-      let numLines = lineSeries.mapLines.length;
-      if (direction == 1) {
-          from = 1
-          to = 0;
-      }
-      let animation = plane.animate({
-          from: from,
-          to: to,
-          property: "position"
-      }, 1, am4core.ease.quadIn);
+    function flyPlane() {
 
-     }
- 
-     function hiddenPlane(){
-         let from, to
-            from = currentPlaneFill
-            to = afterPlaneFill
-         let animation = planeImage.animate({
-             from: from,
-             to: to,
-             property: "fill"
-         },100, am4core.ease.quadIn);
-         animation.events.on("animationended", backPositionPlane);
-     }
- 
-     function flyPlane() {
+       
 
-        
- 
-         // Get current line to attach plane to
-         plane.mapLine = lineSeries.mapLines.getIndex(currentLine);
-         plane.parent = lineSeries;
- 
-         // Set up animation
-         let from, to;
-         let numLines = lineSeries.mapLines.length;
-         if (direction == 1) {
-             from = 0
-             to = 1;
-         }
- 
-         // Start the animation
-         let animation = plane.animate({
-             from: from,
-             to: to,
-             property: "position"
-         }, 1500, am4core.ease.quadIn);
-         animation.events.on("animationended", hiddenPlane)
-         /*animation.events.on("animationprogress", function(ev) {
-           let progress = Math.abs(ev.progress - 0.5);
-           //console.log(progress);
-           //planeImage.scale += 0.2;
-         });*/
-     }
- 
+        // Get current line to attach plane to
+        plane.mapLine = lineSeries.mapLines.getIndex(currentLine);
+        plane.parent = lineSeries;
+
+        // Set up animation
+        let from, to;
+        let numLines = lineSeries.mapLines.length;
+        if (direction == 1) {
+            from = 0
+            to = 1;
+        }
+
+        // Start the animation
+        let animation = plane.animate({
+            from: from,
+            to: to,
+            property: "position"
+        }, 1500, am4core.ease.quadIn);
+        animation.events.on("animationended", hiddenPlane)
+        /*animation.events.on("animationprogress", function(ev) {
+          let progress = Math.abs(ev.progress - 0.5);
+          //console.log(progress);
+          //planeImage.scale += 0.2;
+        });*/
+    }
+    flyPlane();
+    backFillPlane();
+   }
      // Go!
   
  
      document.getElementById('mapdiv').addEventListener('click', function(){
-         flyPlane();
+         addPlane();
          blingCitySource();
          blingCityTarget();
-         backFillPlane();
          backStrokeCitySource();
      });
     }
