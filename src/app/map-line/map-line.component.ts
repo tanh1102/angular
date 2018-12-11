@@ -66,7 +66,7 @@ export class MapLineComponent implements OnInit {
       return cityTarget;
   }
  
-     let paris = addCitySource({ "latitude": 48.8567, "longitude": 2.3510 });
+     let paris = addCitySource({ "latitude": 48.8567, "longitude": 2.3510 } );
      let havana = addCitySource({ "latitude": 23, "longitude": -82 });
      let newyork = addCitySource({ "latitude": 40.717650, "longitude": -74});
 
@@ -136,7 +136,7 @@ export class MapLineComponent implements OnInit {
           from: from,
           to: to,
           property: "radius"
-      },1500, am4core.ease.linear);
+      },400, am4core.ease.linear);
       animation.events.on("animationended", backStrokeCityTarget);// sau khi kết thúc event thì làm gì
     }
 
@@ -239,14 +239,13 @@ export class MapLineComponent implements OnInit {
     function flyPlane() {
 
        
-
+        let numLines = lineSeries.mapLines.length;
         // Get current line to attach plane to
         plane.mapLine = lineSeries.mapLines.getIndex(currentLine);
-        plane.parent = lineSeries;
 
         // Set up animation
         let from, to;
-        let numLines = lineSeries.mapLines.length;
+        
         if (direction == 1) {
             from = 0
             to = 1;
@@ -258,7 +257,10 @@ export class MapLineComponent implements OnInit {
             to: to,
             property: "position"
         }, 1500, am4core.ease.quadIn);
-        animation.events.on("animationended", hiddenPlane)
+        animation.events.on("animationended", function(){
+            hiddenPlane();
+            blingCityTarget();
+        })
         /*animation.events.on("animationprogress", function(ev) {
           let progress = Math.abs(ev.progress - 0.5);
           //console.log(progress);
@@ -274,7 +276,6 @@ export class MapLineComponent implements OnInit {
      document.getElementById('mapdiv').addEventListener('click', function(){
          addPlane();
          blingCitySource();
-         blingCityTarget();
          backStrokeCitySource();
      });
     }
