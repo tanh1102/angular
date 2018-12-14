@@ -17,8 +17,8 @@ export class DataService {
     return this.http.get('https://jsonplaceholder.typicode.com/albums');
   }
 
-  getQuestion(){
-    return this.http.get('./app/world-110m.json');
+  getCities(){
+    return this.http.get('https://my-json-server.typicode.com/tanh1102/angular/posts');
   }
 
 }

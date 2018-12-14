@@ -4,6 +4,8 @@ import * as am4charts from '@amcharts/amcharts4/charts';
 import * as am4maps from "@amcharts/amcharts4/maps";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import am4geodata_worldLow from "@amcharts/amcharts4-geodata/worldLow";
+import { DataService } from '../data.service';
+import {Observable } from 'rxjs';
 am4core.useTheme(am4themes_animated);
 
 @Component({
@@ -12,10 +14,14 @@ am4core.useTheme(am4themes_animated);
   styleUrls: ['./map-line.component.scss']
 })
 export class MapLineComponent implements OnInit {
+    cities$: any;
 
-  constructor() { }
+  constructor(private data: DataService) { }
 
   ngOnInit() {
+    this.data.getCities().subscribe(
+        data => this.cities$ = data
+      );
      //create map
      let map = am4core.create("mapdiv", am4maps.MapChart);
      map.geodata = am4geodata_worldLow;
