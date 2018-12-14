@@ -222,7 +222,7 @@ export class MapLineComponent implements OnInit {
          from: from,
          to: to,
          property: "position"
-     }, 1, am4core.ease.quadIn);
+     }, 100, am4core.ease.quadIn);
      animation.events.on("animationended", function(){
         backFillPlane();
         flyPlane();
@@ -238,7 +238,7 @@ export class MapLineComponent implements OnInit {
             from: from,
             to: to,
             property: "fill"
-        },1, am4core.ease.quadIn);
+        },100, am4core.ease.quadIn);
         animation.events.on("animationended", backPositionPlane);
     }
 
