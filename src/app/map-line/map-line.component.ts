@@ -165,17 +165,19 @@ export class MapLineComponent implements OnInit {
          return line;
      }
 
-     addLine(paris, toronto);
-     addLine(havana, toronto);
-     addLine(newyork, toronto);
+     var routes = {
+         "paris-toronto": addLine(paris, toronto),
+         "havana-toronto": addLine(havana, toronto),
+         "newyork-toronto": addLine(newyork, toronto)
+     };
 
      // Add plane
-   function addPlane(){
-    let plane = lineSeries.mapLines.getIndex(0).lineObjects.create();
-    plane.position = 0;
+   function addPlane(from, to){
+    var route = routes[from + '-' + to];
+    let plane = route.lineObjects.create();
 
     plane.adapter.add("scale", (scale, target) => {
-        return 0.5 * (1 - (Math.abs(0.5 - target.position)));
+        return 0.4 * (1 - (Math.abs(0.4 - target.position)));
     })
 
     let currentPlaneFill = map.colors.getIndex(2).brighten(-0.2);
@@ -194,7 +196,7 @@ export class MapLineComponent implements OnInit {
     
     
     // Plane animation
-    let currentLine = 0;
+    let currentLine = route;
     let direction = 1;
     
 
@@ -206,7 +208,7 @@ export class MapLineComponent implements OnInit {
            from: from,
            to: to,
            property: "fill"
-       },1, am4core.ease.quadIn); 
+       },500, am4core.ease.quadIn); 
     }
 
     function backPositionPlane(){
@@ -221,7 +223,11 @@ export class MapLineComponent implements OnInit {
          to: to,
          property: "position"
      }, 1, am4core.ease.quadIn);
-
+     animation.events.on("animationended", function(){
+        backFillPlane();
+        flyPlane();
+        backStrokeCitySource();
+     });
     }
 
     function hiddenPlane(){
@@ -232,17 +238,15 @@ export class MapLineComponent implements OnInit {
             from: from,
             to: to,
             property: "fill"
-        },100, am4core.ease.quadIn);
+        },1, am4core.ease.quadIn);
         animation.events.on("animationended", backPositionPlane);
     }
 
     function flyPlane() {
 
        
-        let numLines = lineSeries.mapLines.length;
         // Get current line to attach plane to
-        plane.mapLine = lineSeries.mapLines.getIndex(currentLine);
-
+        plane.mapLine = currentLine;
         // Set up animation
         let from, to;
         
@@ -260,6 +264,7 @@ export class MapLineComponent implements OnInit {
         animation.events.on("animationended", function(){
             hiddenPlane();
             blingCityTarget();
+            // flyPlane();
         })
         /*animation.events.on("animationprogress", function(ev) {
           let progress = Math.abs(ev.progress - 0.5);
@@ -268,15 +273,16 @@ export class MapLineComponent implements OnInit {
         });*/
     }
     flyPlane();
-    backFillPlane();
    }
      // Go!
   
  
-     document.getElementById('mapdiv').addEventListener('click', function(){
-         addPlane();
-         blingCitySource();
-         backStrokeCitySource();
-     });
+    //  document.getElementById('mapdiv').addEventListener('click', function(){
+         addPlane("paris", "toronto");
+         addPlane("havana", "toronto");
+         addPlane("newyork", "toronto");
+        //  blingCitySource();
+        //  backStrokeCitySource();
+    //  });
     }
 }
