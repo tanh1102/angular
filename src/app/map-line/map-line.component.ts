@@ -71,12 +71,12 @@ export class MapLineComponent implements OnInit {
       cityTarget.longitude = coords.longitude;
       return cityTarget;
   }
- 
-     let paris = addCitySource({ "latitude": 48.8567, "longitude": 2.3510 } );
-     let havana = addCitySource({ "latitude": 23, "longitude": -82 });
-     let newyork = addCitySource({ "latitude": 40.717650, "longitude": -74});
+    
+     let citySource1 = addCitySource({ "latitude": Math.random()*100, "longitude": Math.random()*100 } );
+     let citySource2 = addCitySource({ "latitude": 23, "longitude": 50 });
+     let citySource3 = addCitySource({ "latitude":-30 , "longitude": 30});
 
-     let toronto = addCityTarget({ "latitude": 43.8163, "longitude": -79.4287 });
+     let cityTargetPoint = addCityTarget({ "latitude": 43.8163, "longitude": -79.4287 });
  
     // Animation of source city
 
@@ -172,9 +172,9 @@ export class MapLineComponent implements OnInit {
      }
 
      var routes = {
-         "paris-toronto": addLine(paris, toronto),
-         "havana-toronto": addLine(havana, toronto),
-         "newyork-toronto": addLine(newyork, toronto)
+         "citySource1-cityTargetPoint": addLine(citySource1, cityTargetPoint),
+         "citySource2-cityTargetPoint": addLine(citySource2, cityTargetPoint),
+         "citySource3-cityTargetPoint": addLine(citySource3, cityTargetPoint)
      };
 
      // Add plane
@@ -283,12 +283,12 @@ export class MapLineComponent implements OnInit {
      // Go!
   
  
-     document.getElementById('mapdiv').addEventListener('click', function(){
-         addPlane("paris", "toronto");
-         addPlane("havana", "toronto");
-         addPlane("newyork", "toronto");
+    //  document.getElementById('mapdiv').addEventListener('click', function(){
+         addPlane("citySource1", "cityTargetPoint");
+         addPlane("citySource2", "cityTargetPoint");
+         addPlane("citySource3", "cityTargetPoint");
         //  blingCitySource();
         //  backStrokeCitySource();
-     });
+    //  });
     }
 }
