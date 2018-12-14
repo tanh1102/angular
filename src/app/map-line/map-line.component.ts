@@ -32,7 +32,7 @@ export class MapLineComponent implements OnInit {
      let cities2 = map.series.push(new am4maps.MapImageSeries());
      cities2.mapImages.template.nonScaling = true;
  
-     let radiusCurrent = 5;
+     let radiusCurrent = 2;
      let radiusAfter = 10;
  
      let strokeCurrent = am4core.color("#000");
@@ -277,12 +277,12 @@ export class MapLineComponent implements OnInit {
      // Go!
   
  
-    //  document.getElementById('mapdiv').addEventListener('click', function(){
+     document.getElementById('mapdiv').addEventListener('click', function(){
          addPlane("paris", "toronto");
          addPlane("havana", "toronto");
          addPlane("newyork", "toronto");
         //  blingCitySource();
         //  backStrokeCitySource();
-    //  });
+     });
     }
 }
